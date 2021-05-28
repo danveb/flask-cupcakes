@@ -1,0 +1,6 @@
+python3 source venv/bin/activate
+source venv/bin/activate
+pip3 install flask flask-sqlalchemy ipython psycopg2-binary sqlalchemy 
+touch .gitignore (venv/) 
+pip3 freeze > requirements.txt 
+createdb cupcakes
