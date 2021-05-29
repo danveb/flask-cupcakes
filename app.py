@@ -41,7 +41,7 @@ def create_cupcake():
     response_json = jsonify(cupcake=new_cupcake.serialize()) 
     return (response_json, 201) 
 
-    # TEST with Insomnia (use JSON)
+    # TEST with Insomnia (use JSON) -> POST 
     # http://localhost:5000/api/cupcakes
     # {
     # 	"flavor" : "vanilla", 
@@ -53,3 +53,50 @@ def create_cupcake():
 # TEST all routes (unittest) 
 # createdb cupcakes_test
 # (venv) $ python -m unittest -v tests
+
+# PATCH Route (update a cupcake) 
+# http://127.0.0.1:5000/api/cupcakes
+@app.route('/api/cupcakes/<int:id>', methods=["PATCH"])
+def update_cupcake(id):
+    """Update a cupcake""" 
+    cupcake = Cupcake.query.get_or_404(id) 
+    # update each data of cupcake (flavor, size, rating, image)
+    # request.json.get? request.json['']? 
+        # cupcake.flavor = request.json.get('flavor', cupcake.flavor) 
+        # cupcake.size = request.json.get('size', cupcake.size)
+        # cupcake.rating = request.json.get('rating', cupcake.rating) 
+        # cupcake.image = request.json.get('image', cupcake.image) 
+    cupcake.flavor = request.json['flavor']
+    cupcake.size = request.json['size']
+    cupcake.rating = request.json['rating']
+    cupcake.image = request.json['image']
+    db.session.commit()
+    # return jsonify 
+    return jsonify(cupcake=cupcake.serialize())
+
+    # TEST with Insomnia (use JSON) -> PATCH 
+    # http://localhost:5000/api/cupcakes/3
+    # {
+    # 	"flavor" : "vanilla", 
+    # 	"size" : "small",
+    # 	"rating" : 4.6, 
+    # 	"image" : "https://tinyurl.com/demo-cupcake"
+    # }
+
+# DELETE Route (delete a cupcake) 
+# http://127.0.0.1:5000/api/cupcakes/3
+@app.route('/api/cupcakes/<int:id>', methods=["DELETE"]) 
+def delete_cupcake(id):
+    """Delete a cupcake"""
+    # find ID 
+    cupcake = Cupcake.query.get_or_404(id) 
+    db.session.delete(cupcake)
+    db.session.commit()
+    # return json
+    return jsonify(message="Cupcake is deleted") 
+
+    # TEST with Insomnia (use JSON) -> DELETE
+    # http://localhost:5000/api/cupcakes/3
+    # {
+    #     "message": "Cupcake is deleted"
+    # }
