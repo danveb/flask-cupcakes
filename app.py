@@ -9,6 +9,14 @@ app.config['SECRET_KEY'] = 'oh-so-super-very-secret'
 
 connect_db(app) 
 
+# GET / 
+@app.route('/') 
+def homepage():
+    """Homepage for Cupcakes"""
+    # show all cupcakes
+    cupcakes = Cupcake.query.all() 
+    return render_template('index.html', cupcakes=cupcakes) 
+
 # GET Route (data of all cupcakes) 
 # http://127.0.0.1:5000/api/cupcakes
 @app.route('/api/cupcakes')
